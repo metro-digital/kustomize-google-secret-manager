@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  CASSANDRA_URL: Y2Fzc2FuZHJhLXBwLmNuLXRjczEubWV0cm8uZGlnaXRhbA==
+  CDN_URL: aHR0cHM6Ly9hc2lhLmNkbi5uZXQ=
+  KUBERNETES_URL: aHR0cHM6Ly9rdWJlcm5ldGVzLXBwLm1ldHJvLmRpZ2l0YWw=
+kind: Secret
+metadata:
+  name: gcp-secret
