@@ -1,6 +1,6 @@
-# ksecrets
+# kustomize-google-secret-manager
 
-A Kustomize Plugin to get Secrets out of Google Secret Manager.
+A Kustomize Plugin to create Kubernetes Secrets out of Google Secret Manager.
 
 Each Kubernetes secret object is represented by one object of kind `KGCPSecret`.
 The metadata.name and metadata.namespace of the object will be the name and namespace of
@@ -33,27 +33,24 @@ Possible postfixes:
 So the most specific entry for key `password` in Secret Manager is `<namespace>_<name>_password_<stage>_<dc>` e.g. `bdm-ns_db-secrets_password_prod_be-gcw1`.
 And the most generic one is `password`.
 
-## Operating the plugin
+## Authentication to Google Secrets Manager
 
-### Authentication to a Secrets Manager
-The plugin uses Go libraries provided by GCP that automatically try various forms of authentication.
+The plugin uses Go libraries provided by Google Cloud Platform that automatically tries various forms of authentication.
 
-#### GCP Secret Manager
 * Run [`gcloud auth application-default login`](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/), follow the instructions, done, OR
 * Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of a GCP Service or User Account credentials file.
 * For additional options and more information, see the [library docs](https://pkg.go.dev/cloud.google.com/go@v0.53.0?tab=doc).
 
-### Running Kustomize with the plugin
+## Running Kustomize with the plugin
 
-* Kustomize expects the plugin to be here: `$XDG_CONFIG_HOME/kustomize/plugin/metro.digital/v1/kgcpsecret/KGCPSecret`.
+* Kustomize expects the plugin to be installed here: `$XDG_CONFIG_HOME/kustomize/plugin/metro.digital/v1/kgcpsecret/KGCPSecret`.
 * On most Unix systems, `$XDG_CONFIG_HOME` is `~/.config`.
-
 * Build and run the plugin without Docker like this:
 
 ```shell
-git clone git@github.com/metro-digital-inner-source/ksecrets.git
-cd ksecrets
-go build -o KGCPSecret main/kgcpsecret.go
+git clone git@github.com/metro-digital/kustomize-google-secret-manager.git
+cd kustomize-google-secret-manager
+make build
 ```
 
 ## Copyright and License
