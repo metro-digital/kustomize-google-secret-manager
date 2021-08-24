@@ -1,0 +1,12 @@
+apiVersion: metro.digital/v1
+kind: KGCPSecret
+metadata:
+  name: gcp-secret
+  stage: pp
+  dc: cn-tcs1
+gcpProjectID:   metro-cf-2tier-github-mom 
+disableNameSuffixHash: true
+keys:
+- CDN_URL
+- KUBERNETES_URL
+- CASSANDRA_URL

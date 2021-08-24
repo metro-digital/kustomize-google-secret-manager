@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+*.pem
+!mock-cert.pem
+.env
+coverage
+lib
+.vscode/settings.json
+.github/.gpg.private
+
+*.js
+!commitlint.config.js
+!jest.config.js
+
+KGCPSecret.linux.amd64
+KGCPSecret
+output.yaml

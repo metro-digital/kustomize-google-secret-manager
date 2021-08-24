@@ -1,0 +1,12 @@
+---
+branches:
+- master
+plugins:
+- - "@semantic-release/commit-analyzer"
+  - preset: conventionalcommits
+- - "@semantic-release/release-notes-generator"
+  - preset: conventionalcommits
+- - "@semantic-release/github"
+  - assets:
+    - path: KGCPSecret.linux.amd64.tar.gz
+      label: KGCPSecret.linux.amd64.tar.gz (Binary - Linux AMD64)

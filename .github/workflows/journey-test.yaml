@@ -1,0 +1,28 @@
+name: JourneyTest
+on:
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+
+jobs:
+  journey-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup tools used by WaaS
+        uses: metro-digital/setup-tools-for-waas@v0.3
+        with:
+          version: 'waas/v1alpha4'
+          gcp_sa_key: '${{ secrets.GCP_SA_KEY }}'
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+      - name: Build kustomize plugin and install it
+        run: |
+          export XDG_CONFIG_HOME=${XDG_CONFIG_HOME-${HOME}/.config}
+          make build
+          make install  
+      - name: Run journey tests
+        run: |
+          cd journey-test && ./journey-test.sh
