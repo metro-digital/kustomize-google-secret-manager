@@ -55,7 +55,7 @@ make build
 
 ## Copyright and License
 
-This software is Copyright by metro.digital, 2021. Licensed under Apache Version 2.0.
+This software is Copyright by METRO Digital GmbH, 2021. Licensed under Apache Version 2.0.
 
 This implementation is inspired by:
 
