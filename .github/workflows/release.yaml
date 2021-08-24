@@ -16,10 +16,10 @@ jobs:
           go-version: 1.14
       - run: |
           go mod tidy
-          GOOS=linux GOARCH=amd64 go build -o=./release/KGCPSecret.linux.amd64 ./main/
+          GOOS=linux GOARCH=amd64 go build -o=./release/KGCPSecret ./main/
       - run: |
           cp ../LICENSE .
-          tar cvzf KGCPSecret.linux.amd64.tar.gz ./KGCPSecret.linux.amd64 ./LICENSE ./LICENSES
+          tar cvzf KGCPSecret.linux.amd64.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
         working-directory: ./release
       - uses: actions/setup-node@v2
         with:
