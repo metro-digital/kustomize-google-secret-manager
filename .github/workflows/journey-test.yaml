@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup tools used by WaaS
-        uses: metro-digital/setup-tools-for-waas@v0.3
+        uses: metro-digital/setup-tools-for-waas@v0.x
         with:
           version: 'waas/v1alpha4'
           gcp_sa_key: '${{ secrets.GCP_SA_KEY }}'
