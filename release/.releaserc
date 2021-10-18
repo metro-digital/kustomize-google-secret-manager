@@ -8,5 +8,9 @@ plugins:
   - preset: conventionalcommits
 - - "@semantic-release/github"
   - assets:
-    - path: KGCPSecret.linux.amd64.tar.gz
+    - path:  KGCPSecret.linux.amd64.tar.gz
       label: KGCPSecret.linux.amd64.tar.gz (Binary - Linux AMD64)
+    - path:  KGCPSecret.darwin.amd64.tar.gz
+      label: KGCPSecret.darwin.amd64.tar.gz (Binary - MAC AMD64)
+    - path:  KGCPSecret.windows.386.tar.gz
+      label: KGCPSecret.windows.386.tar.gz (Binary - Windows 386)
