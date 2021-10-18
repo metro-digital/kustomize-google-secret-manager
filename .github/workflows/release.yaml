@@ -16,11 +16,13 @@ jobs:
           go-version: 1.14
       - run: |
           go mod tidy
-          GOOS=linux GOARCH=amd64 go build -o=./release/KGCPSecret ./main/
-      - run: |
-          cp ../LICENSE .
-          tar cvzf KGCPSecret.linux.amd64.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
-        working-directory: ./release
+          cp LICENSE ./release
+          GOOS=linux GOARCH=amd64 go build -o=./release/KGCPSecret ./main/ 
+          tar -C ./release -cvzf ./release/KGCPSecret.linus.amd64.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
+          GOOS=darwin GOARCH=amd64 go build -o=./release/KGCPSecret ./main/ 
+          tar -C ./release -cvzf ./release/KGCPSecret.darwin.amd64.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
+          GOOS=windows GOARCH=386 go build -o=./release/KGCPSecret ./main/ 
+          tar -C ./release -cvzf ./release/KGCPSecret.windows.386.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
       - uses: actions/setup-node@v2
         with:
           node-version: "14.x"
