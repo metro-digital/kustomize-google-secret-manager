@@ -56,8 +56,8 @@ make build
 ## Supported architectures
 
 * LINUX AMD64 (tested)
-* MAC AMD64 (cross compiled)
-* Windows 386 (cross compiled)
+* MAC AMD64 (only cross compiled)
+* Windows 386 (only cross compiled)
 
 ## Copyright and License
 
