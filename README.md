@@ -53,6 +53,12 @@ cd kustomize-google-secret-manager
 make build
 ```
 
+## Supported architectures
+
+* LINUX AMD64 (tested)
+* MAC AMD64 (only cross compiled)
+* Windows 386 (only cross compiled)
+
 ## Copyright and License
 
 This software is Copyright by METRO Digital GmbH, 2021. Licensed under Apache Version 2.0.
