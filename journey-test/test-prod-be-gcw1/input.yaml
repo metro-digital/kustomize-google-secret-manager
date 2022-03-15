@@ -2,8 +2,8 @@ apiVersion: metro.digital/v1
 kind: KGCPSecret
 metadata:
   name: gcp-secret
-  stage: prod
-  dc: be-gcw1
+  environment: prod
+  tag: be-gcw1
 gcpProjectID:   metro-cf-2tier-github-mom 
 disableNameSuffixHash: true
 keys:

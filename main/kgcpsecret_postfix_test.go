@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+//go:build unitTests
 // +build unitTests
 
 package main_test
@@ -69,7 +70,6 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 
 		encryptedSecret.Stage = "pp"
-		encryptedSecret.Dc = "be-gcw1"
 		value := "https://kubernetes-pp.metro.digital"
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
@@ -198,5 +198,192 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 		Expect(err).ToNot(HaveOccurred())
 		Expect(actual).To(Equal(expected))
 
+	})
+})
+
+var _ = Describe("when creating a Kubernetes secret with different values for environments", func() {
+
+	It("should use the correspondig environment data value for every secret", func() {
+		name := "my-secret"
+		key := "KUBERNETES_URL"
+		encryptedSecret := createEncryptedGCPSecret(name, key)
+
+		encryptedSecret.Environment = "pp"
+		encryptedSecret.Tag = "be-gcw1"
+		value := "https://kubernetes-pp.metro.digital"
+		expected := createExpectedK8SSecret(name, key, value)
+		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		value = "https://kubernetes-prod.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+	})
+})
+
+var _ = Describe("when creating a Kubernetes secret with different values for tags", func() {
+
+	It("should use the correspondig tag data value for every secret", func() {
+		name := "my-secret"
+		key := "CDN_URL"
+		encryptedSecret := createEncryptedGCPSecret(name, key)
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "be-gcw1"
+		value := "https://europe.cdn.net"
+		expected := createExpectedK8SSecret(name, key, value)
+		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "nl-gcw4"
+		value = "https://europe.cdn.net"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "cn-tcs1"
+		value = "https://asia.cdn.net"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "ru-tcm1"
+		value = "https://russia.cdn.net"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+	})
+})
+
+var _ = Describe("when creating a Kubernetes secret with different values for environments and tags", func() {
+
+	It("should use the most specific data value for every secret", func() {
+		name := "my-secret"
+		key := "CASSANDRA_URL"
+		encryptedSecret := createEncryptedGCPSecret(name, key)
+
+		encryptedSecret.Environment = "pp"
+		encryptedSecret.Tag = "be-gcw1"
+		value := "cassandra-pp.be-gcw1.metro.digital"
+		expected := createExpectedK8SSecret(name, key, value)
+		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "be-gcw1"
+		value = "cassandra-prod.be-gcw1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "pp"
+		encryptedSecret.Tag = "nl-gcw4"
+		value = "cassandra-pp.be-gcw1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "nl-gcw4"
+		value = "cassandra-prod.be-gcw1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "pp"
+		encryptedSecret.Tag = "cn-tcs1"
+		value = "cassandra-pp.cn-tcs1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "cn-tcs1"
+		value = "cassandra-prod.cn-tcs1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "pp"
+		encryptedSecret.Tag = "ru-tcm1"
+		value = "cassandra-pp.ru-tcm1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		encryptedSecret.Tag = "ru-tcm1"
+		value = "cassandra-prod.ru-tcm1.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+	})
+})
+
+var _ = Describe("when creating a Kubernetes secret using environments and stages", func() {
+	It("should use environments and overwrite stages", func() {
+		name := "my-secret"
+		key := "KUBERNETES_URL"
+		encryptedSecret := createEncryptedGCPSecret(name, key)
+		encryptedSecret.Stage = "xx"
+
+		encryptedSecret.Environment = "pp"
+		value := "https://kubernetes-pp.metro.digital"
+		expected := createExpectedK8SSecret(name, key, value)
+		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Environment = "prod"
+		value = "https://kubernetes-prod.metro.digital"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+	})
+})
+
+var _ = Describe("when creating a Kubernetes secret using tags and data-centers", func() {
+
+	It("should use tags and overwrite dc", func() {
+		name := "my-secret"
+		key := "CDN_URL"
+		encryptedSecret := createEncryptedGCPSecret(name, key)
+		encryptedSecret.Dc = "xxx"
+
+		encryptedSecret.Tag = "be-gcw1"
+		value := "https://europe.cdn.net"
+		expected := createExpectedK8SSecret(name, key, value)
+		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+
+		encryptedSecret.Tag = "nl-gcw4"
+		value = "https://europe.cdn.net"
+		expected = createExpectedK8SSecret(name, key, value)
+		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
 	})
 })
