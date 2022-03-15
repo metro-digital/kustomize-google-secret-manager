@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+//go:build unitTests
 // +build unitTests
 
 package main_test
@@ -118,9 +119,12 @@ var _ = Describe("when creating a Kubernetes secret from an KGCPSecret with non 
 	}
 
 	It("should create an error", func() {
+		expected := "couldn't find value for secret 'do-not-exist' in Google project 'cf-2tier-uhd-test-d7'"
+
 		_, err := GetSecrets(ctx, nil, &encryptedSecret, getBaseTestKeys, getBaseTestValue)
 
 		Expect(err).To(HaveOccurred())
+		Expect(err.Error()).To(Equal(expected))
 	})
 })
 

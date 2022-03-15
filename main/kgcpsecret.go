@@ -231,7 +231,7 @@ func getBestFittingSecretValue(ctx context.Context, client *secretmanager.Client
 			}
 		}
 	}
-	return "", fmt.Errorf("couldn't find value for secret '%s'", key)
+	return "", fmt.Errorf("couldn't find value for secret '%s' in Google project '%s'", key, plugin.GCPProjectID)
 }
 
 func listGCPSecrets(projectID string) ([]string, error) {
