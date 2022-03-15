@@ -1,9 +1,9 @@
 # kustomize-google-secret-manager
 
-A Kustomize Plugin to create Kubernetes Secrets out of Google Secret Manager.
+A Kustomize Plugin to create Kubernetes Secrets populated with values from Google Secret Manager.
 
 Each Kubernetes secret object is represented by one object of kind `KGCPSecret`.
-The metadata.name and metadata.namespace of the object will be the name and namespace of
+The `metadata.name` and `metadata.namespace` of the object will be the name and namespace of
 the Kubernetes secret, with a possible suffix hash. The key names are each represented by
 a secret in a Secrets Manager, see below for naming.
 
@@ -27,10 +27,10 @@ Possible prefixes:
 
 Possible postfixes:
 
-* `stage`
-* `dc`
+* `environment` (old `stage` is still supported, but will be overwritten by this one if both exists)
+* `tag` (old `dc` is still supported, but will be overwritten by this one if both exists)
 
-So the most specific entry for key `password` in Secret Manager is `<namespace>_<name>_password_<stage>_<dc>` e.g. `bdm-ns_db-secrets_password_prod_be-gcw1`.
+So the most specific entry for key `password` in Secret Manager is `<namespace>_<name>_password_<environment>_<tag>` e.g. `bdm-ns_db-secrets_password_prod_be-gcw1`.
 And the most generic one is `password`.
 
 ## Authentication to Google Secrets Manager
