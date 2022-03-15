@@ -50,6 +50,8 @@ type ObjectMeta struct {
 
 // GCPObjectMeta contains the meta data for KGCPSecret
 type GCPObjectMeta struct {
+	Environment string `json:"environment" yaml:"environment"`
+	Tag         string `json:"tag" yaml:"tag"`
 	Dc          string `json:"dc" yaml:"dc"`
 	Stage       string `json:"stage" yaml:"stage"`
 	Name        string `json:"name" yaml:"name"`
@@ -205,7 +207,14 @@ func getBestFittingSecretValue(ctx context.Context, client *secretmanager.Client
 	plugin *KGCPSecret, allKeys []string, key string, getSecretValues secretValueGetter) (string, error) {
 	var err error
 	value := ""
-
+	environment := plugin.Stage
+	if plugin.Environment != "" {
+		environment = plugin.Environment
+	}
+	tag := plugin.Dc
+	if plugin.Tag != "" {
+		tag = plugin.Tag
+	}
 	prefixes := []string{
 		plugin.Namespace + "_" + plugin.Name + "_",
 		plugin.Name + "_",
@@ -213,9 +222,9 @@ func getBestFittingSecretValue(ctx context.Context, client *secretmanager.Client
 		"",
 	}
 	postfixes := []string{
-		"_" + plugin.Stage + "_" + plugin.Dc,
-		"_" + plugin.Stage,
-		"_" + plugin.Dc,
+		"_" + environment + "_" + tag,
+		"_" + environment,
+		"_" + tag,
 		"",
 	}
 	for _, prefix := range prefixes {
