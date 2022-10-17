@@ -21,7 +21,6 @@ package main_test
 import (
 	"context"
 	"errors"
-
 	. "github.com/metro-digital/kustomize-google-secret-manager/main"
 
 	. "github.com/onsi/ginkgo"
@@ -45,6 +44,10 @@ func getBaseTestValue(ctx context.Context, client *secretmanager.Client, plugin 
 	}
 
 	return "", errors.New("no value found for key")
+}
+
+func getBaseTestValueFailure(ctx context.Context, client *secretmanager.Client, plugin *KGCPSecret, key string) (string, error) {
+	return "", errors.New("helpful error message")
 }
 
 func getBaseTestKeys(project_id string) ([]string, error) {
@@ -119,9 +122,20 @@ var _ = Describe("when creating a Kubernetes secret from an KGCPSecret with non 
 	}
 
 	It("should create an error", func() {
-		expected := "couldn't find value for secret 'do-not-exist' in Google project 'cf-2tier-uhd-test-d7'"
-
+		expected := "error getting 'do-not-exist' secret in Google project 'cf-2tier-uhd-test-d7'. key 'do-not-exist' was not found"
 		_, err := GetSecrets(ctx, nil, &encryptedSecret, getBaseTestKeys, getBaseTestValue)
+
+		Expect(err).To(HaveOccurred())
+		Expect(err.Error()).To(Equal(expected))
+	})
+
+	It("should return an error from getSecretValue", func() {
+		encryptedSecret.Keys = []string{
+			"secret1",
+		}
+
+		expected := "error getting 'secret1' secret in Google project 'cf-2tier-uhd-test-d7'. helpful error message"
+		_, err := GetSecrets(ctx, nil, &encryptedSecret, getBaseTestKeys, getBaseTestValueFailure)
 
 		Expect(err).To(HaveOccurred())
 		Expect(err.Error()).To(Equal(expected))

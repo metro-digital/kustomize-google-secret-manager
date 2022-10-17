@@ -204,8 +204,8 @@ func createGCPSecretValuesGetter(plugin *KGCPSecret, listGCPSecrets secretsGette
 }
 
 func getBestFittingSecretValue(ctx context.Context, client *secretmanager.Client,
-	plugin *KGCPSecret, allKeys []string, key string, getSecretValues secretValueGetter) (string, error) {
-	var err error
+	plugin *KGCPSecret, allKeys []string, key string, getSecretValue secretValueGetter) (string, error) {
+	var err = errors.New(fmt.Sprintf("key '%s' was not found", key))
 	value := ""
 	environment := plugin.Stage
 	if plugin.Environment != "" {
@@ -232,7 +232,7 @@ func getBestFittingSecretValue(ctx context.Context, client *secretmanager.Client
 			lookupKey := prefix + key + postfix
 			for _, k := range allKeys {
 				if k == lookupKey {
-					value, err = getSecretValues(ctx, client, plugin, lookupKey)
+					value, err = getSecretValue(ctx, client, plugin, lookupKey)
 					if err == nil && value != "" {
 						return value, nil
 					}
@@ -240,7 +240,7 @@ func getBestFittingSecretValue(ctx context.Context, client *secretmanager.Client
 			}
 		}
 	}
-	return "", fmt.Errorf("couldn't find value for secret '%s' in Google project '%s'", key, plugin.GCPProjectID)
+	return "", fmt.Errorf("error getting '%s' secret in Google project '%s'. %s", key, plugin.GCPProjectID, err)
 }
 
 func listGCPSecrets(projectID string) ([]string, error) {
