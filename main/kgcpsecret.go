@@ -28,6 +28,7 @@ import (
 	"google.golang.org/api/iterator"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 
+	"github.com/joho/godotenv"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
@@ -69,6 +70,7 @@ type KGCPSecret struct {
 	Type                  string   `json:"type,omitempty" yaml:"type,omitempty"`
 	Behavior              string   `json:"behavior,omitempty" yaml:"behavior,omitempty"`
 	Keys                  []string `json:"keys,omitempty" yaml:"keys,omitempty"`
+	DataType              string   `json:"dataType,omitempty" yaml:"dataType,omitempty"`
 }
 
 // K8SSecret is a Kubernetes Secret
@@ -196,7 +198,19 @@ func createGCPSecretValuesGetter(plugin *KGCPSecret, listGCPSecrets secretsGette
 			if err != nil {
 				return nil, err
 			}
-			secrets[key] = value
+			if plugin.DataType == "envvar" {
+				envvarString, _ := base64.StdEncoding.DecodeString(value)
+				//fmt.Println(envvarString)
+				envvar, err := godotenv.Unmarshal(string(envvarString))
+				if err != nil {
+					return nil, fmt.Errorf("error unmarshalling secret %q: %w", key, err)
+				}
+				for k, v := range envvar {
+					secrets[k] = base64.StdEncoding.EncodeToString([]byte(v))
+				}
+			} else {
+				secrets[key] = value
+			}
 		}
 
 		return
