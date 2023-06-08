@@ -9,7 +9,7 @@ clean:
 
 build: clean
 	go mod tidy
-	GOOS=linux GOARCH=amd64 go build -o=${plugin} ./main/
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o=${plugin} ./main/
 
 install: build
 	mkdir -p ${plugin_path}

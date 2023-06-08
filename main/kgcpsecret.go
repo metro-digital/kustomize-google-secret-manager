@@ -199,9 +199,7 @@ func createGCPSecretValuesGetter(plugin *KGCPSecret, listGCPSecrets secretsGette
 				return nil, err
 			}
 			if plugin.DataType == "envvar" {
-				envvarString, _ := base64.StdEncoding.DecodeString(value)
-				//fmt.Println(envvarString)
-				envvar, err := godotenv.Unmarshal(string(envvarString))
+				envvar, err := godotenv.Unmarshal(string(value))
 				if err != nil {
 					return nil, fmt.Errorf("error unmarshalling secret %q: %w", key, err)
 				}
@@ -209,7 +207,7 @@ func createGCPSecretValuesGetter(plugin *KGCPSecret, listGCPSecrets secretsGette
 					secrets[k] = base64.StdEncoding.EncodeToString([]byte(v))
 				}
 			} else {
-				secrets[key] = value
+				secrets[key] = base64.StdEncoding.EncodeToString([]byte(value))
 			}
 		}
 
@@ -297,7 +295,8 @@ func getGCPSecretValue(ctx context.Context, client *secretmanager.Client, plugin
 	if err != nil {
 		return "", errors.Wrapf(err, "trouble retrieving secret: %s", name)
 	}
-	value := base64.StdEncoding.EncodeToString(secret.GetPayload().GetData())
+
+	value := string(secret.GetPayload().GetData())
 
 	return value, nil
 }
