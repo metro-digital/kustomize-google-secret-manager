@@ -13,6 +13,7 @@ a secret in a Secrets Manager, see below for naming.
 * You can disable the suffix hash by setting `disableNameSuffixHash: true`, see [examples](example).
 * You can set the Kubernetes secret `type` for TLS secrets and the like, see [examples](example).
 * You can set the Kustomize `behavior:` to `replace`, `merge`, or `create` (default is `create`.)
+* You can set the Secret data output as envvar by configuring the `dataType:` to `envvar` (default is `null` or file), see [examples](example). Make sure that your secrets stored in Google Secret Manager use envvar formatted (`KEY=VALUE`) to use this feature.
 
 ## Naming Secrets Manager Secrets
 
