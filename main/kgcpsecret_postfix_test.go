@@ -21,6 +21,7 @@ package main_test
 import (
 	"context"
 	"errors"
+	"encoding/base64"
 
 	. "github.com/metro-digital/kustomize-google-secret-manager/main"
 
@@ -70,14 +71,14 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 
 		encryptedSecret.Stage = "pp"
-		value := "https://kubernetes-pp.metro.digital"
+		value := base64.StdEncoding.EncodeToString([]byte("https://kubernetes-pp.metro.digital"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(actual).To(Equal(expected))
 
 		encryptedSecret.Stage = "prod"
-		value = "https://kubernetes-prod.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("https://kubernetes-prod.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -94,7 +95,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for da
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "be-gcw1"
-		value := "https://europe.cdn.net"
+		value := base64.StdEncoding.EncodeToString([]byte("https://europe.cdn.net"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -102,7 +103,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for da
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "nl-gcw4"
-		value = "https://europe.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://europe.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -110,7 +111,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for da
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "cn-tcs1"
-		value = "https://asia.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://asia.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -118,7 +119,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for da
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "ru-tcm1"
-		value = "https://russia.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://russia.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -136,7 +137,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "pp"
 		encryptedSecret.Dc = "be-gcw1"
-		value := "cassandra-pp.be-gcw1.metro.digital"
+		value := base64.StdEncoding.EncodeToString([]byte("cassandra-pp.be-gcw1.metro.digital"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -144,7 +145,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "be-gcw1"
-		value = "cassandra-prod.be-gcw1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.be-gcw1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -152,7 +153,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "pp"
 		encryptedSecret.Dc = "nl-gcw4"
-		value = "cassandra-pp.be-gcw1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-pp.be-gcw1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -160,7 +161,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "nl-gcw4"
-		value = "cassandra-prod.be-gcw1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.be-gcw1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -168,7 +169,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "pp"
 		encryptedSecret.Dc = "cn-tcs1"
-		value = "cassandra-pp.cn-tcs1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-pp.cn-tcs1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -176,7 +177,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "cn-tcs1"
-		value = "cassandra-prod.cn-tcs1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.cn-tcs1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -184,7 +185,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "pp"
 		encryptedSecret.Dc = "ru-tcm1"
-		value = "cassandra-pp.ru-tcm1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-pp.ru-tcm1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -192,7 +193,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for st
 
 		encryptedSecret.Stage = "prod"
 		encryptedSecret.Dc = "ru-tcm1"
-		value = "cassandra-prod.ru-tcm1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.ru-tcm1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -210,14 +211,14 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "pp"
 		encryptedSecret.Tag = "be-gcw1"
-		value := "https://kubernetes-pp.metro.digital"
+		value := base64.StdEncoding.EncodeToString([]byte("https://kubernetes-pp.metro.digital"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(actual).To(Equal(expected))
 
 		encryptedSecret.Environment = "prod"
-		value = "https://kubernetes-prod.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("https://kubernetes-prod.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -234,7 +235,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for ta
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "be-gcw1"
-		value := "https://europe.cdn.net"
+		value := base64.StdEncoding.EncodeToString([]byte("https://europe.cdn.net"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -242,7 +243,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for ta
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "nl-gcw4"
-		value = "https://europe.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://europe.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -250,7 +251,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for ta
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "cn-tcs1"
-		value = "https://asia.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://asia.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -258,7 +259,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for ta
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "ru-tcm1"
-		value = "https://russia.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://russia.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -276,7 +277,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "pp"
 		encryptedSecret.Tag = "be-gcw1"
-		value := "cassandra-pp.be-gcw1.metro.digital"
+		value := base64.StdEncoding.EncodeToString([]byte("cassandra-pp.be-gcw1.metro.digital"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -284,7 +285,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "be-gcw1"
-		value = "cassandra-prod.be-gcw1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.be-gcw1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -292,7 +293,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "pp"
 		encryptedSecret.Tag = "nl-gcw4"
-		value = "cassandra-pp.be-gcw1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-pp.be-gcw1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -300,7 +301,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "nl-gcw4"
-		value = "cassandra-prod.be-gcw1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.be-gcw1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -308,7 +309,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "pp"
 		encryptedSecret.Tag = "cn-tcs1"
-		value = "cassandra-pp.cn-tcs1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-pp.cn-tcs1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -316,7 +317,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "cn-tcs1"
-		value = "cassandra-prod.cn-tcs1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.cn-tcs1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -324,7 +325,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "pp"
 		encryptedSecret.Tag = "ru-tcm1"
-		value = "cassandra-pp.ru-tcm1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-pp.ru-tcm1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -332,7 +333,7 @@ var _ = Describe("when creating a Kubernetes secret with different values for en
 
 		encryptedSecret.Environment = "prod"
 		encryptedSecret.Tag = "ru-tcm1"
-		value = "cassandra-prod.ru-tcm1.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("cassandra-prod.ru-tcm1.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -349,14 +350,14 @@ var _ = Describe("when creating a Kubernetes secret using environments and stage
 		encryptedSecret.Stage = "xx"
 
 		encryptedSecret.Environment = "pp"
-		value := "https://kubernetes-pp.metro.digital"
+		value := base64.StdEncoding.EncodeToString([]byte("https://kubernetes-pp.metro.digital"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(actual).To(Equal(expected))
 
 		encryptedSecret.Environment = "prod"
-		value = "https://kubernetes-prod.metro.digital"
+		value = base64.StdEncoding.EncodeToString([]byte("https://kubernetes-prod.metro.digital"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
@@ -373,14 +374,14 @@ var _ = Describe("when creating a Kubernetes secret using tags and data-centers"
 		encryptedSecret.Dc = "xxx"
 
 		encryptedSecret.Tag = "be-gcw1"
-		value := "https://europe.cdn.net"
+		value := base64.StdEncoding.EncodeToString([]byte("https://europe.cdn.net"))
 		expected := createExpectedK8SSecret(name, key, value)
 		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(actual).To(Equal(expected))
 
 		encryptedSecret.Tag = "nl-gcw4"
-		value = "https://europe.cdn.net"
+		value = base64.StdEncoding.EncodeToString([]byte("https://europe.cdn.net"))
 		expected = createExpectedK8SSecret(name, key, value)
 		actual, err = GetSecrets(ctx, nil, &encryptedSecret, getPostfixTestKeys, getPostfixTestValue)
 		Expect(err).ToNot(HaveOccurred())

@@ -21,6 +21,7 @@ package main_test
 import (
 	"context"
 	"errors"
+	"encoding/base64"
 	. "github.com/metro-digital/kustomize-google-secret-manager/main"
 
 	. "github.com/onsi/ginkgo"
@@ -33,6 +34,8 @@ var base_secret_values = map[string]string{
 	"secret1": "secret1-42",
 	"secret2": "secret2-42",
 	"secret3": "val-secret3",
+	"secret4": "KEY1=VAL1",
+	"secret5": "KEY2=VAL2",
 }
 
 func getBaseTestValue(ctx context.Context, client *secretmanager.Client, plugin *KGCPSecret, key string) (string, error) {
@@ -89,8 +92,54 @@ var _ = Describe("when creating a Kubernetes secret from an KGCPSecret with mini
 			Annotations: map[string]string{},
 		},
 		Data: map[string]string{
-			"secret1": "secret1-42",
-			"secret2": "secret2-42",
+			"secret1": base64.StdEncoding.EncodeToString([]byte("secret1-42")),
+			"secret2": base64.StdEncoding.EncodeToString([]byte("secret2-42")),
+		},
+		Type: "",
+	}
+
+	It("should create a correct K8S secret", func() {
+		actual, err := GetSecrets(ctx, nil, &encryptedSecret, getBaseTestKeys, getBaseTestValue)
+
+		Expect(err).ToNot(HaveOccurred())
+		Expect(actual).To(Equal(expected))
+	})
+})
+
+var _ = Describe("when creating a Kubernetes secret from an KGCPSecret with minimal data and env type data", func() {
+	encryptedSecret := KGCPSecret{
+		TypeMeta: TypeMeta{
+			APIVersion: "metro.digital/v1",
+			Kind:       "KGCPSecret",
+		},
+		GCPObjectMeta: GCPObjectMeta{
+			Name:        "my-secret",
+			Labels:      map[string]string{},
+			Annotations: map[string]string{},
+		},
+		GCPProjectID:          "cf-2tier-uhd-test-d7",
+		DisableNameSuffixHash: true,
+		DataType:              "envvar",
+		Keys: []string{
+			"secret4",
+			"secret5",
+		},
+	}
+
+	expected := K8SSecret{
+		TypeMeta: TypeMeta{
+			APIVersion: "v1",
+			Kind:       "Secret",
+		},
+		ObjectMeta: ObjectMeta{
+			Name:        "my-secret",
+			Namespace:   "",
+			Labels:      map[string]string{},
+			Annotations: map[string]string{},
+		},
+		Data: map[string]string{
+			"KEY1": base64.StdEncoding.EncodeToString([]byte("VAL1")),
+			"KEY2": base64.StdEncoding.EncodeToString([]byte("VAL2")),
 		},
 		Type: "",
 	}
@@ -191,9 +240,9 @@ var _ = Describe("when creating a Kubernetes secret from an KGCPSecret with full
 			},
 		},
 		Data: map[string]string{
-			"secret1": "secret1-42",
-			"secret2": "secret2-42",
-			"secret3": "val-secret3",
+			"secret1": base64.StdEncoding.EncodeToString([]byte("secret1-42")),
+			"secret2": base64.StdEncoding.EncodeToString([]byte("secret2-42")),
+			"secret3": base64.StdEncoding.EncodeToString([]byte("val-secret3")),
 		},
 		Type: "opaque",
 	}
