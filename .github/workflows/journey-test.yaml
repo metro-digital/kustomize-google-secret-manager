@@ -15,7 +15,7 @@ jobs:
       - name: Setup tools used by WaaS
         uses: metro-digital/setup-tools-for-waas@v0.x
         with:
-          version: 'waas/v2alpha1'
+          version: 'waas/v2'
       - uses: actions/setup-go@v2
         with:
           go-version: 1.17

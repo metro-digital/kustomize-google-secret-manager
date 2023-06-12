@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+//go:build unitTests
 // +build unitTests
 
 package main_test
@@ -20,6 +21,7 @@ package main_test
 import (
 	"context"
 	"errors"
+	"encoding/base64"
 
 	. "github.com/metro-digital/kustomize-google-secret-manager/main"
 
@@ -65,7 +67,7 @@ var _ = Describe("when creating a Kubernetes secret", func() {
 	Describe("with a secret manager not containing a secret prefixed with secret name", func() {
 		name := "your-secret"
 		key := "VALUE1"
-		value := "main-VALUE1-value"
+		value := base64.StdEncoding.EncodeToString([]byte("main-VALUE1-value"))
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 		expected := createExpectedK8SSecret(name, key, value)
 
@@ -80,7 +82,7 @@ var _ = Describe("when creating a Kubernetes secret", func() {
 	Describe("with a secret manager containing a secret prefixed with secret name", func() {
 		name := "my-secret"
 		key := "VALUE1"
-		value := "my-secret-VALUE1-value"
+		value := base64.StdEncoding.EncodeToString([]byte("my-secret-VALUE1-value"))
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 		expected := createExpectedK8SSecret(name, key, value)
 
@@ -95,7 +97,7 @@ var _ = Describe("when creating a Kubernetes secret", func() {
 	Describe("with a secret manager containing a secret prefixed with namespace name", func() {
 		name := "my-secret"
 		key := "VALUE2"
-		value := "my-namespace-VALUE2-value"
+		value := base64.StdEncoding.EncodeToString([]byte("my-namespace-VALUE2-value"))
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 		encryptedSecret.Namespace = "my-namespace"
 		expected := createExpectedK8SSecret(name, key, value)
@@ -112,7 +114,7 @@ var _ = Describe("when creating a Kubernetes secret", func() {
 	Describe("with a secret manager containing a secret prefixed with namespace and secret name", func() {
 		name := "my-secret"
 		key := "VALUE3"
-		value := "my-namespace-and-secret-VALUE3-value"
+		value := base64.StdEncoding.EncodeToString([]byte("my-namespace-and-secret-VALUE3-value"))
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 		encryptedSecret.Namespace = "my-namespace"
 		expected := createExpectedK8SSecret(name, key, value)
@@ -132,7 +134,7 @@ var _ = Describe("when creating a Kubernetes secret of type 'dockercfg'", func()
 	It("should use the correspondig data value for every secret", func() {
 		name := "dockercfg1"
 		key := "data"
-		value := "my-dockercfg1-data-value"
+		value := base64.StdEncoding.EncodeToString([]byte("my-dockercfg1-data-value"))
 		encryptedSecret := createEncryptedGCPSecret(name, key)
 		expected := createExpectedK8SSecret(name, key, value)
 
@@ -143,7 +145,7 @@ var _ = Describe("when creating a Kubernetes secret of type 'dockercfg'", func()
 
 		name = "dockercfg2"
 		key = "data"
-		value = "my-dockercfg2-data-value"
+		value = base64.StdEncoding.EncodeToString([]byte("my-dockercfg2-data-value"))
 		encryptedSecret = createEncryptedGCPSecret(name, key)
 		expected = createExpectedK8SSecret(name, key, value)
 
