@@ -17,11 +17,13 @@ jobs:
       - run: |
           go mod tidy
           cp LICENSE ./release
-          GOOS=linux GOARCH=amd64 go build -o=./release/KGCPSecret ./main/ 
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o=./release/KGCPSecret ./main/ 
           tar -C ./release -cvzf ./release/KGCPSecret.linux.amd64.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
-          GOOS=darwin GOARCH=amd64 go build -o=./release/KGCPSecret ./main/ 
+          GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o=./release/KGCPSecret ./main/ 
           tar -C ./release -cvzf ./release/KGCPSecret.darwin.amd64.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
-          GOOS=windows GOARCH=386 go build -o=./release/KGCPSecret ./main/ 
+          GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o=./release/KGCPSecret ./main/ 
+          tar -C ./release -cvzf ./release/KGCPSecret.darwin.arm.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
+          GOOS=windows GOARCH=386 CGO_ENABLED=0 go build -o=./release/KGCPSecret ./main/ 
           tar -C ./release -cvzf ./release/KGCPSecret.windows.386.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
       - uses: actions/setup-node@v2
         with:

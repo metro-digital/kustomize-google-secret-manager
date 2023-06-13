@@ -58,6 +58,7 @@ make build
 
 * LINUX AMD64 (tested)
 * MAC AMD64 (only cross compiled)
+* MAC ARM64 (only cross compiled)
 * Windows 386 (only cross compiled)
 
 ## Copyright and License
