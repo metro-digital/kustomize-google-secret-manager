@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+//go:build unitTests
 // +build unitTests
 
 package main_test
@@ -43,6 +44,7 @@ func createEncryptedGCPSecret(name string, secretKey string) KGCPSecret {
 		DisableNameSuffixHash: true,
 		Type:                  "",
 		Behavior:              "",
+		DataType:              "",
 		Keys: []string{
 			secretKey,
 		},
