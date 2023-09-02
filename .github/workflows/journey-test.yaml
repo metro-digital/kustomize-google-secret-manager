@@ -18,7 +18,7 @@ jobs:
           version: 'waas/v2'
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.17
+          go-version: 1.21
       - name: Build kustomize plugin and install it
         run: |
           export XDG_CONFIG_HOME=${XDG_CONFIG_HOME-${HOME}/.config}

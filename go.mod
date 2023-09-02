@@ -1,6 +1,6 @@
 module github.com/metro-digital/kustomize-google-secret-manager
 
-go 1.17
+go 1.21
 
 require (
 	cloud.google.com/go v0.89.0

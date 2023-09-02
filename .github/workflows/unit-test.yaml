@@ -17,5 +17,5 @@ jobs:
       - run: |
           go mod tidy
           ~/go/bin/ginkgo -tags unitTests -randomizeAllSpecs -failFast -r .
-      - run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.41.1
+      - run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.54.2
       - run: bin/golangci-lint run -c .golangci.yml ./...

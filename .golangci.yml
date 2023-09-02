@@ -60,7 +60,7 @@ linters:
   enable:
     - asciicheck
     - bodyclose
-    - deadcode
+    # - deadcode
     # - depguard
     - dogsled
     - dupl
@@ -85,13 +85,13 @@ linters:
     - rowserrcheck
     - exportloopref
     - staticcheck
-    - structcheck
+    # - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
+    # - varcheck
     - whitespace
 
   # don't enable:
