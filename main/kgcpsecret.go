@@ -20,7 +20,6 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -119,7 +118,7 @@ func processEncryptedGCPSecret(fn string) (string, error) {
 }
 
 func readInput(fn string) (KGCPSecret, error) {
-	content, err := ioutil.ReadFile(fn)
+	content, err := os.ReadFile(fn)
 	if err != nil {
 		return KGCPSecret{}, err
 	}

@@ -25,7 +25,7 @@ jobs:
           tar -C ./release -cvzf ./release/KGCPSecret.windows.386.tar.gz ./KGCPSecret ./LICENSE ./LICENSES
       - uses: actions/setup-node@v2
         with:
-          node-version: "14.x"
+          node-version: "16.x"
       - run: npm install conventional-changelog-conventionalcommits
         working-directory: ./release
       - run: npx semantic-release@17.4.3
